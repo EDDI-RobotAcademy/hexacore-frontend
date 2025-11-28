@@ -1,21 +1,19 @@
 "use client";
 
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchTopKeywords } from "@/lib/api";
+import type { KeywordMention } from "@/types/stock";
 import MetricCard from "../cards/MetricCard";
 import KeywordRankingChart from "../charts/KeywordRankingChart";
 import KeywordPieChart from "../charts/KeywordPieChart";
 import KeywordWordCloud from "../charts/KeywordWordCloud";
 
-export default function DashboardPage() {
-  const keywordQuery = useQuery({
-    queryKey: ["topKeywords"],
-    queryFn: () => fetchTopKeywords(1000)
-  });
+type Props = {
+  keywords: KeywordMention[];
+};
 
+export default function DashboardPage({ keywords }: Props) {
   const keywordMetrics = useMemo(() => {
-    if (!keywordQuery.data?.length) {
+    if (!keywords?.length) {
       return {
         totalMentions: 0,
         topKeyword: "--",
@@ -24,19 +22,19 @@ export default function DashboardPage() {
       };
     }
 
-    const totalMentions = keywordQuery.data.reduce(
+    const totalMentions = keywords.reduce(
       (sum, item) => sum + item.mention_count,
       0
     );
-    const top = keywordQuery.data[0];
+    const top = keywords[0];
 
     return {
       totalMentions,
       topKeyword: top.name,
       topMentions: `${top.mention_count.toLocaleString()}회`,
-      uniqueKeywords: keywordQuery.data.length
+      uniqueKeywords: keywords.length
     };
-  }, [keywordQuery.data]);
+  }, [keywords]);
 
   return (
     <main className="px-6 py-8 max-w-6xl mx-auto space-y-8">
@@ -67,12 +65,12 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <KeywordRankingChart data={keywordQuery.data} loading={keywordQuery.isLoading} />
-        <KeywordPieChart data={keywordQuery.data} loading={keywordQuery.isLoading} />
+        <KeywordRankingChart data={keywords} loading={false} />
+        <KeywordPieChart data={keywords} loading={false} />
       </section>
 
       <section>
-        <KeywordWordCloud data={keywordQuery.data} loading={keywordQuery.isLoading} />
+        <KeywordWordCloud data={keywords} loading={false} />
       </section>
     </main>
   );
