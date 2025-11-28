@@ -64,6 +64,5 @@ export type AnalyzedData = {
 export type HealthStatus = {
   status: string;
   database: string;
-  redis: string;
 };
 
