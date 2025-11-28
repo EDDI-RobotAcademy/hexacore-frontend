@@ -48,3 +48,22 @@ export type KeywordMention = {
   mention_count: number;
 };
 
+export type Keyword = {
+  id: number;
+  name: string;
+};
+
+export type AnalyzedData = {
+  id: number;
+  title: string;
+  content: string;
+  keywords: string[];
+  published_at: string | null;
+};
+
+export type HealthStatus = {
+  status: string;
+  database: string;
+  redis: string;
+};
+

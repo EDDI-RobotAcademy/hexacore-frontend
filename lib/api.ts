@@ -1,12 +1,5 @@
-import type {
-  AlertItem,
-  MentionPoint,
-  SentimentSnapshot,
-  ThemeMomentum,
-  TrendingStock,
-  WeeklyStockStat
-} from "@/types/stock";
-import { API_BASE_URL } from "./env";
+import {API_BASE_URL} from "./env";
+import type { KeywordMention, Keyword, AnalyzedData, HealthStatus } from "@/types/stock";
 
 const API_BASE = API_BASE_URL;
 
@@ -23,39 +16,19 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json();
 }
 
-export async function fetchTrendingStocks(): Promise<TrendingStock[]> {
-  return request("/api/stocks/trending");
-}
-
-export async function fetchMentions(code: string): Promise<MentionPoint[]> {
-  return request(`/api/stocks/${code}/mentions`);
-}
-
-export async function fetchSentiment(
-  code: string
-): Promise<SentimentSnapshot> {
-  return request(`/api/stocks/${code}/sentiment`);
-}
-
-export async function fetchThemes(): Promise<ThemeMomentum[]> {
-  return request("/api/themes");
-}
-
-export async function fetchThemeMomentum(
-  theme: string
-): Promise<ThemeMomentum> {
-  return request(`/api/themes/${theme}/momentum`);
-}
-
-export async function fetchSpikeAlerts(): Promise<AlertItem[]> {
-  return request("/api/alerts/spike");
-}
-
-export async function fetchWeeklyStockStats(): Promise<WeeklyStockStat[]> {
-  return request("/api/stocks/weekly");
-}
-
-export async function fetchTopKeywords(limit: number = 20): Promise<import("@/types/stock").KeywordMention[]> {
+export async function fetchTopKeywords(limit: number = 20): Promise<KeywordMention[]> {
   return request(`/keywords/top?limit=${limit}`);
+}
+
+export async function fetchAllKeywords(): Promise<Keyword[]> {
+  return request(`/keywords/`);
+}
+
+export async function fetchAnalyzedData(limit: number = 20): Promise<AnalyzedData[]> {
+  return request(`/data/?limit=${limit}`);
+}
+
+export async function fetchHealthStatus(): Promise<HealthStatus> {
+  return request(`/health`);
 }
 
