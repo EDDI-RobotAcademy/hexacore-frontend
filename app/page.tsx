@@ -13,7 +13,7 @@ export default async function Home() {
   const [keywords, allKeywords, articles, healthResult] = await Promise.all([
     fetchTopKeywords(1000),
     fetchAllKeywords().catch(() => []),
-    fetchAnalyzedData(50).catch(() => []),
+    fetchAnalyzedData(500).catch(() => []),
     fetchHealthStatus()
       .then((data) => ({ data, error: false }))
       .catch(() => ({ data: undefined, error: true }))
